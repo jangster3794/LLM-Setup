@@ -1,25 +1,28 @@
-version: '3'
+version: '3.9'
+
 services:
   # Python Backend Service
   backend:
+    container_name: backend
     build:
       context: ./LLM-Backend  # Path to your Python application code
     ports:
       - "5000:5000"  # Map container port 5000 to host port 5000
     volumes:
       - ./LLM-Backend:/app  # Mount the local directory to the /app directory in the container
-    environment:
-      - FLASK_ENV=development  # Set Flask environment to development for debugging
+    env_file:
+      - .env
 
   # React Frontend Service
   frontend:
+    container_name: frontend
     build:
       context: ./LLM-Frontend  # Path to your React.js application code
     ports:
       - "3000:3000"  # Map container port 3000 to host port 3000
     volumes:
       - ./LLM-Frontend:/app  # Mount the local directory to the /app directory in the container
-    environment:
-      - REACT_APP_BACKEND_URL=http://backend:5000  # Set the backend URL for the React app
+    env_file:
+      - .env
     depends_on:
       - backend
